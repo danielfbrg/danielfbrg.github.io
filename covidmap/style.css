@@ -40,3 +40,6 @@ footer {
 .p1 {
   font-size: 11px;
 }
+
+/*Leaflet Container if basemap failed to load*/
+.leaflet-container { background-color:  rgb(37, 37, 37) }
