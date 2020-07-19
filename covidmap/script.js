@@ -1,8 +1,6 @@
 //LayerGeoJSON
 var mescladoLayer;
 
-//var mescladoLayer = new.L.GeoJson.AJAX(["data/separado.geojson"]);
-
 
 const city = {
   nome: [],
@@ -151,7 +149,6 @@ legend.onAdd = function (map) {
 };
 legend.addTo(map);
 
-/* CODE DUDU */
 
 /* Envia local do mouse para função */
 function renderCovidCases(onmouse) {
@@ -199,7 +196,7 @@ function renderCovidCases(onmouse) {
   }
 }
 
-//CALL API
+// API Url
 
 const api_url =
   "https://brasil.io/api/dataset/covid19/caso/data/?is_last=True&state=RJ";
