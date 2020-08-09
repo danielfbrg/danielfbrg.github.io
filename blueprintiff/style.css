@@ -1,0 +1,12 @@
+#map {
+    height: 640px;
+    width: 800px;
+    margin: auto;
+}
+
+body {
+    background-color: #f2efe9;
+}
+
+/*Leaflet Container*/
+.leaflet-container { background-color: #f2efe9}
