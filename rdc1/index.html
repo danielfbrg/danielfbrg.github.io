@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="css/qgis2web.css" />
+    <link rel="stylesheet" href="css/fontawesome-all.min.css" />
+    <style>
+      #map {
+        margin: auto;
+        width: 640px;
+        height: 450px;
+      }
+
+      #title_proj {
+        text-align: center;
+        color: #00bf0a;
+      }
+
+      #autores {
+        text-align: center;
+      }
+
+      #rodape {
+        text-align: center;
+        margin-top: px;
+        font-weight: bold;
+      }
+    </style>
+    <title>Gestão RDC | Macaé - RJ</title>
+  </head>
+  <body>
+    <h3 id="title_proj">
+      GESTÃO DE RESÍDUOS DE DEMOLIÇÃO E CONSTRUÇÃO CIVIL (RDC) COM
+      GEOCOLABORAÇÃO ONLINE: <br />
+      ESTUDO NO MUNICÍPIO DE MACAÉ-RJ
+    </h3>
+
+    <h4 id="autores">
+      Daniel Ferraz Braga <br />
+      José Augusto Ferreira da Silva
+    </h4>
+
+    <div id="map"></div>
+    <script src="js/qgis2web_expressions.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="js/L.Control.Locate.min.js"></script>
+    <script src="js/leaflet.rotatedMarker.js"></script>
+    <script src="js/leaflet.pattern.js"></script>
+    <script src="js/leaflet-hash.js"></script>
+    <script src="js/Autolinker.min.js"></script>
+    <script src="js/rbush.min.js"></script>
+    <script src="js/labelgun.min.js"></script>
+    <script src="js/labels.js"></script>
+    <script src="data/Maca_1.js"></script>
+    <script src="data/Bairros_2.js"></script>
+    <script src="data/RDC_3.js"></script>
+    <script>
+      var highlightLayer;
+      function highlightFeature(e) {
+        highlightLayer = e.target;
+        highlightLayer.openPopup();
+      }
+      var map = L.map("map", {
+        zoomControl: true,
+        maxZoom: 28,
+        minZoom: 1,
+      }).fitBounds([
+        [-22.428972970683702, -41.87565543633989],
+        [-22.375577704558083, -41.81777395295193],
+      ]);
+      var hash = new L.Hash(map);
+      map.attributionControl.setPrefix(
+        '<a href="http://portal1.iff.edu.br/nossos-campi/macae"> Instituto Federal Fluminense - Campus Macaé</a> <a href="https://github.com/tomchadwin/qgis2web" target="_blank"></a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>'
+      );
+      var autolinker = new Autolinker({
+        truncate: { length: 30, location: "smart" },
+      });
+      L.control.locate({ locateOptions: { maxZoom: 19 } }).addTo(map);
+      var bounds_group = new L.featureGroup([]);
+      function setBounds() {}
+      map.createPane("pane_MapaBase_0");
+      map.getPane("pane_MapaBase_0").style.zIndex = 400;
+      var layer_MapaBase_0 = L.tileLayer(
+        "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+          pane: "pane_MapaBase_0",
+          opacity: 1.0,
+          attribution:
+            '',
+          minZoom: 1,
+          maxZoom: 28,
+          minNativeZoom: 0,
+          maxNativeZoom: 20,
+        }
+      );
+      layer_MapaBase_0;
+      map.addLayer(layer_MapaBase_0);
+      function pop_Maca_1(feature, layer) {
+        layer.on({
+          mouseout: function (e) {
+            if (typeof layer.closePopup == "function") {
+              layer.closePopup();
+            } else {
+              layer.eachLayer(function (feature) {
+                feature.closePopup();
+              });
+            }
+          },
+          mouseover: highlightFeature,
+        });
+        var popupContent =
+          '<table>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["fid"] !== null
+            ? autolinker.link(feature.properties["fid"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["id"] !== null
+            ? autolinker.link(feature.properties["id"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["cd_geocodm"] !== null
+            ? autolinker.link(feature.properties["cd_geocodm"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["nm_municip"] !== null
+            ? autolinker.link(feature.properties["nm_municip"].toLocaleString())
+            : "") +
+          "</td>\
+                    </tr>\
+                </table>";
+        layer.bindPopup(popupContent, { maxHeight: 400 });
+      }
+
+      function style_Maca_1_0() {
+        return {
+          pane: "pane_Maca_1",
+          opacity: 1,
+          color: "rgba(0,0,232,1.0)",
+          dashArray: "",
+          lineCap: "butt",
+          lineJoin: "miter",
+          weight: 3.0,
+          fillOpacity: 0,
+          interactive: false,
+        };
+      }
+      map.createPane("pane_Maca_1");
+      map.getPane("pane_Maca_1").style.zIndex = 401;
+      map.getPane("pane_Maca_1").style["mix-blend-mode"] = "normal";
+      var layer_Maca_1 = new L.geoJson(json_Maca_1, {
+        attribution: "",
+        interactive: false,
+        dataVar: "json_Maca_1",
+        layerName: "layer_Maca_1",
+        pane: "pane_Maca_1",
+        onEachFeature: pop_Maca_1,
+        style: style_Maca_1_0,
+      });
+      bounds_group.addLayer(layer_Maca_1);
+      map.addLayer(layer_Maca_1);
+      function pop_Bairros_2(feature, layer) {
+        layer.on({
+          mouseout: function (e) {
+            if (typeof layer.closePopup == "function") {
+              layer.closePopup();
+            } else {
+              layer.eachLayer(function (feature) {
+                feature.closePopup();
+              });
+            }
+          },
+          mouseover: highlightFeature,
+        });
+        var popupContent =
+          '<table>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["fid"] !== null
+            ? autolinker.link(feature.properties["fid"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["objectid"] !== null
+            ? autolinker.link(feature.properties["objectid"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["shape_leng"] !== null
+            ? autolinker.link(feature.properties["shape_leng"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["shape_area"] !== null
+            ? autolinker.link(feature.properties["shape_area"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["nome"] !== null
+            ? autolinker.link(feature.properties["nome"].toLocaleString())
+            : "") +
+          "</td>\
+                    </tr>\
+                </table>";
+        layer.bindPopup(popupContent, { maxHeight: 400 });
+      }
+
+      function style_Bairros_2_0() {
+        return {
+          pane: "pane_Bairros_2",
+          opacity: 1,
+          color: "rgba(226,16,16,1.0)",
+          dashArray: "",
+          lineCap: "butt",
+          lineJoin: "miter",
+          weight: 3.0,
+          fillOpacity: 0,
+          interactive: false,
+        };
+      }
+      map.createPane("pane_Bairros_2");
+      map.getPane("pane_Bairros_2").style.zIndex = 402;
+      map.getPane("pane_Bairros_2").style["mix-blend-mode"] = "normal";
+      var layer_Bairros_2 = new L.geoJson(json_Bairros_2, {
+        attribution: "",
+        interactive: false,
+        dataVar: "json_Bairros_2",
+        layerName: "layer_Bairros_2",
+        pane: "pane_Bairros_2",
+        onEachFeature: pop_Bairros_2,
+        style: style_Bairros_2_0,
+      });
+      bounds_group.addLayer(layer_Bairros_2);
+      map.addLayer(layer_Bairros_2);
+      function pop_RDC_3(feature, layer) {
+        layer.on({
+          mouseout: function (e) {
+            if (typeof layer.closePopup == "function") {
+              layer.closePopup();
+            } else {
+              layer.eachLayer(function (feature) {
+                feature.closePopup();
+              });
+            }
+          },
+          mouseover: highlightFeature,
+        });
+        var popupContent =
+          '<table>\
+                    <tr>\
+                        <th scope="row">Leste</th>\
+                        <td>' +
+          (feature.properties["Leste"] !== null
+            ? autolinker.link(feature.properties["Leste"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Norte</th>\
+                        <td>' +
+          (feature.properties["Norte"] !== null
+            ? autolinker.link(feature.properties["Norte"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["Altitude"] !== null
+            ? autolinker.link(feature.properties["Altitude"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Data e Hora</strong><br />' +
+          (feature.properties["Data e Hora"] !== null
+            ? autolinker.link(
+                feature.properties["Data e Hora"].toLocaleString()
+              )
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Informante</th>\
+                        <td>' +
+          (feature.properties["Informante"] !== null
+            ? autolinker.link(feature.properties["Informante"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bairro</th>\
+                        <td>' +
+          (feature.properties["Bairro"] !== null
+            ? autolinker.link(feature.properties["Bairro"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Município</strong><br />' +
+          (feature.properties["Município"] !== null
+            ? autolinker.link(feature.properties["Município"].toLocaleString())
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' +
+          (feature.properties["Foto"] !== null
+            ? '<img src="images/' +
+              String(feature.properties["Foto"])
+                .replace(/[\\\/:]/g, "_")
+                .trim() +
+              '">'
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Tipo de Resíduo</strong><br />' +
+          (feature.properties["Tipo de Resíduo"] !== null
+            ? autolinker.link(
+                feature.properties["Tipo de Resíduo"].toLocaleString()
+              )
+            : "") +
+          '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Email</strong><br />' +
+          (feature.properties["Email"] !== null
+            ? autolinker.link(feature.properties["Email"].toLocaleString())
+            : "") +
+          "</td>\
+                    </tr>\
+                </table>";
+        layer.bindPopup(popupContent, { maxHeight: 400 });
+      }
+
+      function style_RDC_3_0() {
+        return {
+          pane: "pane_RDC_3",
+          radius: 8.0,
+          opacity: 1,
+          color: "rgba(128,17,25,1.0)",
+          dashArray: "",
+          lineCap: "butt",
+          lineJoin: "miter",
+          weight: 2.0,
+          fill: true,
+          fillOpacity: 1,
+          fillColor: "rgba(219,255,42,1.0)",
+          interactive: true,
+        };
+      }
+      map.createPane("pane_RDC_3");
+      map.getPane("pane_RDC_3").style.zIndex = 403;
+      map.getPane("pane_RDC_3").style["mix-blend-mode"] = "normal";
+      var layer_RDC_3 = new L.geoJson(json_RDC_3, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_RDC_3",
+        layerName: "layer_RDC_3",
+        pane: "pane_RDC_3",
+        onEachFeature: pop_RDC_3,
+        pointToLayer: function (feature, latlng) {
+          var context = {
+            feature: feature,
+            variables: {},
+          };
+          return L.circleMarker(latlng, style_RDC_3_0(feature));
+        },
+      });
+      bounds_group.addLayer(layer_RDC_3);
+      map.addLayer(layer_RDC_3);
+      var baseMaps = {};
+      L.control
+        .layers(
+          baseMaps,
+          {
+            '<img src="legend/RDC_3.png" /> <b>RDC': layer_RDC_3,
+            '<img src="legend/Bairros_2.png" /> <b>Bairros': layer_Bairros_2,
+            '<img src="legend/Maca_1.png" /> <b>Macaé': layer_Maca_1,
+            "<b>Mapa Base": layer_MapaBase_0,
+          },
+          { collapsed: false }
+        )
+        .addTo(map);
+      setBounds();
+    </script>
+  </body>
+  <footer id="rodape">
+    <style>
+      .wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .box {
+        width: 25.5%;
+        box-sizing: border-box;
+        border: 1px;
+        padding: 1px;
+        font-size: 100%;
+        margin: 0px 0px 0px 0px;
+      }
+    </style>
+
+    <div class="wrapper">
+      <div class="box b"><small>Apoio:</small></div>
+      <div class="box d"><small>Fomento:</small></div>
+    </div>
+
+    <div class="wrapper">
+      <div class="box b">
+        <a href="http://portal1.iff.edu.br/nossos-campi/macae" target="_blank">
+          <img src="images\iffluminense2.png" style="width: 180px; height: px;"
+        /></a>
+      </div>
+      <div class="box d">
+        <a href="http://www.cnpq.br/" target="_blank"
+          ><img
+            src="images\cnpq-logo-6.png"
+            style="width: 100px; height: 42px;"
+        /></a>
+      </div>
+    </div>
+  </footer>
+</html>
