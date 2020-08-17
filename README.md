@@ -10,7 +10,7 @@
 ## Against-Covid
 [**Demo**](https://danielfbrg.github.io/covidmap/ "Demo")
 
-## Qgis2threejs App
+## Qgis2threejs App | Modelo Sana-RJ
 [**Demo**](https://danielfbrg.github.io/sanamodel/)
 
 ## RDC sem Cluster
